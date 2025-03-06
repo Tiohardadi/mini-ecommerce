@@ -22,7 +22,7 @@ const CartItem = ({ item }) => {
       <div className="flex items-center space-x-4">
         <img 
         //   src={`/api/placeholder/80/80`} 
-          src={`https://mrmockup.com/wp-content/uploads/2024/07/Free-Backside-T-Shirt-Mockup-Square-1024x1024.jpg?x33229`} 
+          src={item.product.image || `https://mrmockup.com/wp-content/uploads/2024/07/Free-Backside-T-Shirt-Mockup-Square-1024x1024.jpg?x33229`} 
           alt={item.product.name} 
           className="w-16 h-16 object-cover rounded"
         />

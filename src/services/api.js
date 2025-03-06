@@ -31,12 +31,14 @@ export const getProduct = async (id) => {
 }
 
 export const createProduct = async (productData) => {
-  const response = await api.post('/products', productData)
+  const userId = localStorage.getItem('userId')
+  const response = await api.post('/products', {userId,...productData})
   return response.data
 }
 
 export const updateProduct = async (id, productData) => {
-  const response = await api.put(`/products/${id}`, productData)
+  const userId = localStorage.getItem('userId')
+  const response = await api.put(`/products/${id}`, {userId,...productData})
   return response.data
 }
 

@@ -86,7 +86,7 @@ const ProductDetail = () => {
             <div className="flex justify-center items-start">
               <img
                 // src={product.imageUrl || "https://placehold.co/600x600"}
-                src={`https://mrmockup.com/wp-content/uploads/2024/07/Free-Backside-T-Shirt-Mockup-Square-1024x1024.jpg?x33229`}
+                src={product.image || `https://mrmockup.com/wp-content/uploads/2024/07/Free-Backside-T-Shirt-Mockup-Square-1024x1024.jpg?x33229`} 
                 alt={product.name}
                 className="w-full h-auto"
               />
