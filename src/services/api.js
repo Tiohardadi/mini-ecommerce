@@ -59,7 +59,7 @@ export const getCart = async () => {
 
 export const addToCart = async (productId, quantity = 1) => {
   // Get current user
-  const userResponse = await api.get('/users/me')
+  const userResponse = await api.get('/users')
   const userId = userResponse.data.id
 
   // Check if product already in cart

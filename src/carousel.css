@@ -1,0 +1,23 @@
+/* Carousel styling */
+.carousel-open:checked + .carousel-item {
+    position: static;
+    opacity: 100;
+  }
+  
+  .carousel-item {
+    transition: opacity 0.6s ease-out;
+  }
+  
+  #carousel-1:checked ~ .control-1,
+  #carousel-2:checked ~ .control-2,
+  #carousel-3:checked ~ .control-3 {
+    display: block;
+  }
+  
+  .carousel-indicators {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+  }

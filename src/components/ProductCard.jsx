@@ -19,7 +19,7 @@ const ProductCard = ({ product }) => {
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
       <Link to={`/product/${product.id}`}>
         <img 
-          src={`/api/placeholder/300/200`} 
+          src={`https://mrmockup.com/wp-content/uploads/2024/07/Free-Backside-T-Shirt-Mockup-Square-1024x1024.jpg?x33229`} 
           alt={product.name} 
           className="w-full h-48 object-cover"
         />
@@ -28,10 +28,10 @@ const ProductCard = ({ product }) => {
           <h3 className="text-lg font-semibold">{product.name}</h3>
           <p className="text-gray-600 text-sm mb-2">{product.description}</p>
           <div className="flex justify-between items-center">
-            <span className="text-blue-600 font-bold">${product.price.toFixed(2)}</span>
+            <span className="text-black font-bold">${product.price.toFixed(2)}</span>
             <button 
               onClick={handleAddToCart}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"
+              className="bg-black hover:bg-gray-800 text-white px-3 py-1 rounded text-sm"
             >
               Add to Cart
             </button>
