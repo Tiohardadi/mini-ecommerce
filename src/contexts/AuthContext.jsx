@@ -28,8 +28,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const { user, token } = await apiLogin(email, password)
+      const { user, token, userId } = await apiLogin(email, password)
       localStorage.setItem('token', token)
+      localStorage.setItem('userId', userId)
       setUser(user)
       return true
     } catch (error) {
