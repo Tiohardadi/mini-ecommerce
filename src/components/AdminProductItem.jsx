@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { updateProduct, deleteProduct } from '../services/api'
-
+import { Pencil, Trash } from 'lucide-react'
 const AdminProductItem = ({ product, categories, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
@@ -119,14 +119,14 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
         <div className="flex space-x-2">
           <button
             type="submit"
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+            className="border border-black text-white px-5 py-2 rounded-md bg-black hover:bg-gray-500 transition"
           >
             Save
           </button>
           <button
             type="button"
             onClick={() => setIsEditing(false)}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+            className="border border-black text-black px-5 py-2 rounded-md hover:bg-gray-100 transition"
           >
             Cancel
           </button>
@@ -147,15 +147,15 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
       <div className="flex space-x-2">
         <button
           onClick={() => setIsEditing(true)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+          className="px-3 py-1 flex items-center"
         >
-          Edit
+          <Pencil size={16} className="mr-1" />
         </button>
         <button
           onClick={handleDelete}
-          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+          className="px-3 py-1 transition flex items-center"
         >
-          Delete
+          <Trash size={16} />
         </button>
       </div>
     </div>

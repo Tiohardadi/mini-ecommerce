@@ -1,144 +1,129 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router' 
-import { useAuth } from '../contexts/AuthContext'
+import { useNavigate, Link } from 'react-router'
+import { registerUser } from '../services/auth'
 
 const Register = () => {
   const navigate = useNavigate()
-  const { register } = useAuth()
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  })
-  const [errors, setErrors] = useState({})
+  const [formData, setFormData] = useState({ email: '', password: '', confirmPassword: '' })
+  const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value
-    })
-    
-    // Clear error when user types
-    if (errors[name]) {
-      setErrors({
-        ...errors,
-        [name]: ''
-      })
-    }
-  }
-
-  const validateForm = () => {
-    const newErrors = {}
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid'
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Password is required'
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters'
-    }
-    
-    return newErrors
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
-    const validationErrors = validateForm()
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors)
+    setError('')
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Password dan konfirmasi password tidak cocok!')
       return
     }
-    
+
     setIsLoading(true)
-    
+
     try {
-      await register(formData.email, formData.password)
-      // If we get here without an error being thrown, registration was successful
-      navigate('/login', { 
-        state: { message: 'Registration successful! Please log in.' } 
-      })
-    } catch (error) {
-      if (error.message === 'Email already exists') {
-        setErrors({ email: 'Email is already registered' })
+      const result = await registerUser(formData.email, formData.password)
+      if (result) {
+        navigate('/login')
       } else {
-        setErrors({ general: error.message || 'Registration failed. Please try again.' })
+        setError('Registration failed')
       }
+    } catch (error) {
+      setError('Failed to register. Please try again.')
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold mb-6 text-center">Register</h1>
+    <div className="min-h-screen w-full flex items-center justify-center ">
+      <div className="w-full max-w-md border border-gray-300 rounded-lg shadow-lg p-8">
+      <h2 className="text-2xl font-normal mb-8 text-center">REGISTER</h2>
         
-        {errors.general && (
-          <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
-            {errors.general}
+        {error && (
+          <div className="mb-6 p-3 bg-gray-50 text-black text-sm">
+            {error}
           </div>
         )}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-normal text-gray-700 mb-1">
               Email
             </label>
             <input
               type="email"
               id="email"
-              name="email"
               value={formData.email}
-              onChange={handleChange}
-              className={`w-full p-2 border rounded ${errors.email ? 'border-red-500' : ''}`}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full p-2 border border-gray-300 focus:outline-none"
               required
             />
-            {errors.email && (
-              <p className="text-red-600 text-sm mt-1">{errors.email}</p>
-            )}
           </div>
-          
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium mb-1">
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-normal text-gray-700 mb-1">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`w-full p-2 border rounded ${errors.password ? 'border-red-500' : ''}`}
-              required
-            />
-            {errors.password && (
-              <p className="text-red-600 text-sm mt-1">{errors.password}</p>
-            )}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="w-full p-2 border border-gray-300 focus:outline-none"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs uppercase"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </div>
-          
+
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-normal text-gray-700 mb-1">
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                className="w-full p-2 border border-gray-300 focus:outline-none"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs uppercase"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded ${
-              isLoading ? 'opacity-50 cursor-not-allowed' : ''
+            className={`w-full py-2 px-4 bg-black text-white text-sm uppercase tracking-wider ${
+              isLoading ? "opacity-50" : "hover:bg-gray-900"
             }`}
           >
-            {isLoading ? 'Registering...' : 'Register'}
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </form>
-        
-        <div className="mt-4 text-center">
-          <p>
-            Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 hover:underline">
-              Login here
-            </Link>
+
+        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+          <p className="text-gray-700 text-sm">
+            Already have an account?{" "}
+            <Link to="/login" className="text-black hover:underline">Log in</Link>
           </p>
         </div>
       </div>
