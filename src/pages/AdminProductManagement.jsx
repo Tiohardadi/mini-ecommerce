@@ -1,175 +1,109 @@
-// src/pages/AdminProductManagement.jsx
-import { useState, useEffect } from 'react'
-import { getProducts, getCategories, createProduct } from '../services/api'
-import AdminProductItem from '../components/AdminProductItem'
+import { useState, useEffect } from 'react';
+import { getProducts, getCategories, createProduct } from '../services/api';
+import AdminProductItem from '../components/AdminProductItem';
 
 const AdminProductManagement = () => {
-  const [products, setProducts] = useState([])
-  const [categories, setCategories] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isAdding, setIsAdding] = useState(false)
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     description: '',
     stock: '',
     categoryId: '',
-    image: 'placeholder.jpg' // Using placeholder as default
-  })
+    image: ''
+  });
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const [productsData, categoriesData] = await Promise.all([
         getProducts(),
         getCategories()
-      ])
-      setProducts(productsData)
-      setCategories(categoriesData)
+      ]);
+      setProducts(productsData);
+      setCategories(categoriesData);
       
-      // Set default category if available
       if (categoriesData.length > 0 && !formData.categoryId) {
         setFormData(prev => ({
           ...prev,
           categoryId: categoriesData[0].id
-        }))
+        }));
       }
     } catch (error) {
-      console.error("Failed to fetch data:", error)
+      console.error("Failed to fetch data:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: name === 'price' || name === 'stock' || name === 'categoryId' 
         ? Number(value) 
         : value
-    }))
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      await createProduct(formData)
-      setIsAdding(false)
-      setFormData({
-        name: '',
-        price: '',
-        description: '',
-        stock: '',
-        categoryId: categories[0]?.id || '',
-        image: 'placeholder.jpg'
-      })
-      fetchData()
-    } catch (error) {
-      console.error("Failed to create product:", error)
-    }
-  }
-
-  if (isLoading) {
-    return <div className="text-center py-10">Loading products...</div>
-  }
+    }));
+  };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Product Management</h1>
-        
-        <button
-          onClick={() => setIsAdding(!isAdding)}
-          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-        >
+    <div className="p-8 font-['Work Sans'] text-gray-800 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-semibold">Product Management</h1>
+        <button onClick={() => setIsAdding(!isAdding)} className="border border-black text-black px-5 py-2 rounded-md hover:bg-gray-100 transition">
           {isAdding ? 'Cancel' : 'Add New Product'}
         </button>
       </div>
       
       {isAdding && (
-        <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
+        <div className="mb-8">
+          <h2 className="text-xl font-medium mb-4">Add New Product</h2>
           
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <form className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                  required
-                />
+                <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none" required />
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-1">Price</label>
-                <input
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                  step="0.01"
-                  min="0"
-                  className="w-full p-2 border rounded"
-                  required
-                />
+                <input type="number" name="price" value={formData.price} onChange={handleChange} step="0.01" min="0" className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none" required />
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-1">Stock</label>
-                <input
-                  type="number"
-                  name="stock"
-                  value={formData.stock}
-                  onChange={handleChange}
-                  min="0"
-                  className="w-full p-2 border rounded"
-                  required
-                />
+                <input type="number" name="stock" value={formData.stock} onChange={handleChange} min="0" className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none" required />
               </div>
               
               <div>
                 <label className="block text-sm font-medium mb-1">Category</label>
-                <select
-                  name="categoryId"
-                  value={formData.categoryId}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                  required
-                >
+                <select name="categoryId" value={formData.categoryId} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none" required>
                   {categories.map(category => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
+                    <option key={category.id} value={category.id}>{category.name}</option>
                   ))}
                 </select>
               </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-1">Image URL</label>
+                <input type="text" name="image" value={formData.image} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none" placeholder="https://example.com/image.jpg" required />
+              </div>
             </div>
             
-            <div className="mb-4">
+            <div>
               <label className="block text-sm font-medium mb-1">Description</label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                className="w-full p-2 border rounded"
-                rows="3"
-                required
-              />
+              <textarea name="description" value={formData.description} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none" rows="3" required />
             </div>
             
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-            >
+            <button type="submit" className="border border-black text-white px-5 py-2 rounded-md bg-black transition">
               Add Product
             </button>
           </form>
@@ -178,22 +112,17 @@ const AdminProductManagement = () => {
       
       <div>
         {products.length === 0 ? (
-          <div className="text-center py-10 bg-white rounded-lg shadow">
+          <div className="text-center py-10">
             <p className="text-gray-500">No products available. Add your first product!</p>
           </div>
         ) : (
           products.map(product => (
-            <AdminProductItem 
-              key={product.id} 
-              product={product} 
-              categories={categories}
-              onUpdate={fetchData}
-            />
+            <AdminProductItem key={product.id} product={product} categories={categories} onUpdate={fetchData} />
           ))
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminProductManagement
+export default AdminProductManagement;
