@@ -10,6 +10,8 @@ import AdminProductManagement from './pages/AdminProductManagement'
 import { useAuth } from './contexts/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import AdminRoute from './components/AdminRoute'
+import Register from './pages/Register'
+
 
 function App() {
   const { isLoading } = useAuth()
@@ -26,6 +28,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           
           {/* Protected routes for all logged in users */}
           <Route element={<PrivateRoute />}>

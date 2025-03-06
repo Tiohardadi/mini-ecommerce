@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3001'
+const API_URL = 'http://10.50.0.13:3004'
 
 export const login = async (email, password) => {
   try {
@@ -22,7 +22,7 @@ export const register = async (email, password) => {
       token: response.data.accessToken
     }
   } catch (error) {
-    throw new Error('Registration failed')
+    throw new Error('Registration failed || Email is already registered')
   }
 }
 

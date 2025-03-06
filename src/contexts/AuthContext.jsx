@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { login as apiLogin, getCurrentUser } from '../services/auth'
+import { login as apiLogin, register as apiRegister, getCurrentUser } from '../services/auth'
 
 const AuthContext = createContext(null)
 
@@ -38,6 +38,16 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const register = async (email, password) => {
+    try {
+      const response = await apiRegister(email, password)
+      return response.success
+    } catch (error) {
+      console.error("Registration failed:", error)
+      throw error  // We're throwing the error so the Register component can handle specific error messages
+    }
+  }
+
   const logout = () => {
     localStorage.removeItem('token')
     setUser(null)
@@ -48,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin, isLoading }}>
+    <AuthContext.Provider value={{ user, login, logout, register, isAdmin, isLoading }}>
       {children}
     </AuthContext.Provider>
   )
