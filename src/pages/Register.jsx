@@ -1,13 +1,16 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, Link } from 'react-router'
 import { registerUser } from '../services/auth'
-import { motion } from 'framer-motion'
 
 const Register = () => {
   const navigate = useNavigate()
   const [formData, setFormData] = useState({ email: '', password: '', confirmPassword: '' })
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -35,29 +38,19 @@ const Register = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-blue-500 to-white">
-      <motion.div
-        className="bg-white bg-opacity-30 backdrop-blur-lg shadow-lg rounded-2xl p-8 w-full max-w-sm border border-white border-opacity-40 transform transition-all duration-500"
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
-        <h1 className="text-3xl font-bold text-center text-gray-800 drop-shadow-lg mb-6">Register</h1>
-
+    <div className="min-h-screen w-full flex items-center justify-center ">
+      <div className="w-full max-w-md border border-gray-300 rounded-lg shadow-lg p-8">
+      <h2 className="text-2xl font-normal mb-8 text-center">REGISTER</h2>
+        
         {error && (
-          <motion.div 
-            className="bg-red-100 text-red-700 p-3 rounded mb-4 text-center shadow-md"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
+          <div className="mb-6 p-3 bg-gray-50 text-black text-sm">
             {error}
-          </motion.div>
+          </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <motion.div whileFocus={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-normal text-gray-700 mb-1">
               Email
             </label>
             <input
@@ -65,58 +58,75 @@ const Register = () => {
               id="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full p-3 border rounded-lg bg-white text-gray-800 focus:ring-2 focus:ring-blue-400 transition-shadow shadow-sm focus:shadow-lg"
+              className="w-full p-2 border border-gray-300 focus:outline-none"
               required
             />
-          </motion.div>
+          </div>
 
-          <motion.div whileFocus={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <div>
+            <label htmlFor="password" className="block text-sm font-normal text-gray-700 mb-1">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full p-3 border rounded-lg bg-white text-gray-800 focus:ring-2 focus:ring-blue-400 transition-shadow shadow-sm focus:shadow-lg"
-              required
-            />
-          </motion.div>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="w-full p-2 border border-gray-300 focus:outline-none"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs uppercase"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
 
-          <motion.div whileFocus={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-normal text-gray-700 mb-1">
               Confirm Password
             </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-              className="w-full p-3 border rounded-lg bg-white text-gray-800 focus:ring-2 focus:ring-blue-400 transition-shadow shadow-sm focus:shadow-lg"
-              required
-            />
-          </motion.div>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                className="w-full p-2 border border-gray-300 focus:outline-none"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs uppercase"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
 
-          <motion.button
+          <button
             type="submit"
             disabled={isLoading}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.9 }}
-            className={`w-full text-white font-bold py-3 rounded-lg transition-all shadow-lg ${
-              isLoading
-                ? 'bg-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 active:scale-95 transform duration-150'
+            className={`w-full py-2 px-4 bg-black text-white text-sm uppercase tracking-wider ${
+              isLoading ? "opacity-50" : "hover:bg-gray-900"
             }`}
           >
-            {isLoading ? 'Registering...' : 'Register'}
-          </motion.button>
+            {isLoading ? "Registering..." : "Register"}
+          </button>
         </form>
 
-        <div className="text-center text-sm text-gray-800 mt-4">
-          Already have an account? <a href="/login" className="underline text-blue-600">Login</a>
+        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+          <p className="text-gray-700 text-sm">
+            Already have an account?{" "}
+            <Link to="/login" className="text-black hover:underline">Log in</Link>
+          </p>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

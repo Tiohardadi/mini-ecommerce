@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router'
+import { useNavigate, useLocation, Link } from 'react-router'
 import { useAuth } from '../contexts/AuthContext'
 
 const Login = () => {
@@ -10,6 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const from = location.state?.from?.pathname || '/'
 
@@ -33,19 +34,19 @@ const Login = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+    <div className="min-h-screen w-full flex items-center justify-center">
+      <div className="w-full max-w-md border border-gray-300 rounded-lg shadow-lg p-8">
+        <h2 className="text-2xl font-normal mb-8 text-center">LOG IN</h2>
         
         {error && (
-          <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+          <div className="mb-6 p-3 bg-gray-50 text-black text-sm">
             {error}
           </div>
         )}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-normal text-gray-700 mb-1">
               Email
             </label>
             <input
@@ -53,35 +54,67 @@ const Login = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border border-gray-300 focus:outline-none"
               required
             />
           </div>
-          
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium mb-1">
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-normal text-gray-700 mb-1">
               Password
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded"
-              required
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 focus:outline-none"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 text-xs uppercase"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </div>
-          
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="remember"
+                className="h-4 w-4 border border-gray-300"
+              />
+              <label htmlFor="remember" className="ml-2 text-sm text-gray-700">
+                Remember me
+              </label>
+            </div>
+            <Link to="/forgot-password" className="text-sm text-gray-700 hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
+
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded ${
-              isLoading ? 'opacity-50 cursor-not-allowed' : ''
+            className={`w-full py-2 px-4 bg-black text-white text-sm uppercase tracking-wider ${
+              isLoading ? "opacity-50" : "hover:bg-gray-900"
             }`}
           >
-            {isLoading ? 'Logging in...' : 'Log In'}
+            {isLoading ? "Logging in..." : "Log in"}
           </button>
         </form>
+
+        <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+          <p className="text-gray-700 text-sm">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-black hover:underline">Register</Link>
+          </p>
+        </div>
       </div>
     </div>
   )

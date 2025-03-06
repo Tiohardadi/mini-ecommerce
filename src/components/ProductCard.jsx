@@ -19,7 +19,9 @@ const ProductCard = ({ product }) => {
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
       <Link to={`/product/${product.id}`}>
         <img 
-          src={`/api/placeholder/300/200`} 
+        //   src={`/api/placeholder/300/200`} 
+          src={`https://mrmockup.com/wp-content/uploads/2024/07/Free-Backside-T-Shirt-Mockup-Square-1024x1024.jpg?x33229`} 
+
           alt={product.name} 
           className="w-full h-48 object-cover"
         />

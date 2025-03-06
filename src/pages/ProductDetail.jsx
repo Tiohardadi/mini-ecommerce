@@ -77,7 +77,8 @@ const ProductDetail = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <img 
-            src={`/api/placeholder/400/400`} 
+            // src={`/api/placeholder/400/400`} 
+            src={`https://mrmockup.com/wp-content/uploads/2024/07/Free-Backside-T-Shirt-Mockup-Square-1024x1024.jpg?x33229`} 
             alt={product.name} 
             className="w-full h-auto rounded-lg"
           />
