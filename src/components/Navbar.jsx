@@ -1,10 +1,10 @@
-import { Link } from 'react-router'
-import { useAuth } from '../contexts/AuthContext'
-import { useCart } from '../contexts/CartContext'
+import { Link } from 'react-router';
+import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 
 const Navbar = () => {
-  const { user, logout, isAdmin } = useAuth()
-  const { cart } = useCart()
+  const { user, logout, isAdmin } = useAuth();
+  const { cart } = useCart();
 
   return (
     <nav className="bg-blue-600 text-white shadow-md">
@@ -39,17 +39,25 @@ const Navbar = () => {
               </button>
             </>
           ) : (
-            <Link 
-              to="/login" 
-              className="bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded"
-            >
-              Login
-            </Link>
+            <>
+              <Link 
+                to="/login" 
+                className="bg-blue-500 hover:bg-blue-700 px-3 py-1 rounded"
+              >
+                Login
+              </Link>
+              <Link 
+                to="/register" 
+                className="bg-yellow-400 hover:bg-yellow-500 px-3 py-1 rounded"
+              >
+                Register
+              </Link>
+            </>
           )}
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
