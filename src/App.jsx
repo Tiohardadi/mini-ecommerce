@@ -24,7 +24,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
       {!hideNavbar && <Navbar />}
       <div className="container mx-auto py-4 px-4">
         <Routes>
