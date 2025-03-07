@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://10.50.0.13:3004' // Using the first database server
+const API_URL = ' http://localhost:3004' // Using the first database server
 
 // Create axios instance with auth header
 const api = axios.create({
@@ -48,6 +48,11 @@ export const deleteProduct = async (id) => {
 // Categories
 export const getCategories = async () => {
   const response = await api.get('/categories')
+  return response.data
+}
+
+export const createCategory = async (categoryData) => {
+  const response = await api.post('/categories', categoryData)
   return response.data
 }
 
