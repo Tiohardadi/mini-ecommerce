@@ -33,13 +33,12 @@ const OrderList = () => {
     )
   }
 
-  // Group orders by date
-  const ordersByDate = orders.reduce((groups, order) => {
-    const date = new Date(order.orderDate).toLocaleDateString()
-    if (!groups[date]) {
-      groups[date] = []
+  // Group orders by userId
+  const ordersByUser = orders.reduce((groups, order) => {
+    if (!groups[order.userId]) {
+      groups[order.userId] = []
     }
-    groups[date].push(order)
+    groups[order.userId].push(order)
     return groups
   }, {})
 
@@ -47,41 +46,49 @@ const OrderList = () => {
     <div>
       <h1 className="text-2xl font-bold mb-6">Your Orders</h1>
       
-      {Object.entries(ordersByDate).map(([date, dateOrders]) => (
-        <div key={date} className="mb-6">
-          <h2 className="text-lg font-semibold mb-3">
-            Orders placed on {date}
-          </h2>
+      {Object.entries(ordersByUser).map(([userId, userOrders]) => (
+        <div key={userId} className="mb-8">
+          <h2 className="text-lg font-semibold mb-3">User ID: {userId}</h2>
           
-          <div className="bg-white rounded-lg shadow-lg divide-y">
-            {dateOrders.map(order => (
-              <div key={order.id} className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <div>
-                    <h3 className="font-medium">{order.product.name}</h3>
-                    <p className="text-sm text-gray-600">
-                      Quantity: {order.quantity} × ${order.product.price.toFixed(2)}
-                    </p>
+          {Object.entries(
+            userOrders.reduce((groups, order) => {
+              const date = new Date(order.orderDate).toLocaleDateString()
+              if (!groups[date]) {
+                groups[date] = []
+              }
+              groups[date].push(order)
+              return groups
+            }, {})
+          ).map(([date, dateOrders]) => (
+            <div key={date} className="mb-6">
+              <h3 className="text-md font-semibold mb-2">Orders placed on {date}</h3>
+              <div className="bg-white rounded-lg shadow-lg divide-y">
+                {dateOrders.map(order => (
+                  <div key={order.id} className="p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3 className="font-medium">{order.product.name}</h3>
+                        <p className="text-sm text-gray-600">
+                          Quantity: {order.quantity} × ${order.product.price.toFixed(2)}
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                          {order.status}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between">
+                      <p className="text-sm text-gray-600">Order #{order.id}</p>
+                      <p className="font-medium">Total: ${order.totalPrice.toFixed(2)}</p>
+                    </div>
                   </div>
-                  
-                  <div>
-                    <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
-                      {order.status}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between">
-                  <p className="text-sm text-gray-600">
-                    Order #{order.id}
-                  </p>
-                  <p className="font-medium">
-                    Total: ${order.totalPrice.toFixed(2)}
-                  </p>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       ))}
     </div>

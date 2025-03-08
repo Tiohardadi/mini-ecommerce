@@ -95,7 +95,9 @@ export const removeFromCart = async (itemId) => {
 
 // Orders
 export const getOrders = async () => {
-  const response = await api.get('/orders?_expand=product')
+  const userId = localStorage.getItem('userId')
+  const userData = JSON.parse(localStorage.getItem('userData'))
+  const response = await api.get(userData?.role === 'admin'?`/orders?_expand=product`:`/orders?_expand=product&userId=${userId}`)
   return response.data
 }
 

@@ -1,51 +1,56 @@
-import { useState } from 'react'
-import { updateProduct, deleteProduct } from '../services/api'
-import { Pencil, Trash } from 'lucide-react'
+import { useState } from "react";
+import { updateProduct, deleteProduct } from "../services/api";
+import { Pencil, Trash } from "lucide-react";
 const AdminProductItem = ({ product, categories, onUpdate }) => {
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: product.name,
     price: product.price,
+    image: product.image,
     description: product.description,
     stock: product.stock,
-    categoryId: product.categoryId
-  })
+    categoryId: product.categoryId,
+  });
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === 'price' || name === 'stock' || name === 'categoryId' 
-        ? Number(value) 
-        : value
-    }))
-  }
+      [name]:
+        name === "price" || name === "stock" || name === "categoryId"
+          ? Number(value)
+          : value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await updateProduct(product.id, formData)
-      setIsEditing(false)
-      if (onUpdate) onUpdate()
+      await updateProduct(product.id, formData);
+      setIsEditing(false);
+      if (onUpdate) onUpdate();
     } catch (error) {
-      console.error("Failed to update product:", error)
+      console.error("Failed to update product:", error);
     }
-  }
+  };
 
   const handleDelete = async () => {
     if (window.confirm(`Are you sure you want to delete ${product.name}?`)) {
       try {
-        await deleteProduct(product.id)
-        if (onUpdate) onUpdate()
+        await deleteProduct(product.id);
+        if (onUpdate) onUpdate();
       } catch (error) {
-        console.error("Failed to delete product:", error)
+        console.error("Failed to delete product:", error);
       }
     }
-  }
+  };
 
   if (isEditing) {
     return (
-      <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow mb-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-4 rounded shadow mb-4"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
@@ -58,7 +63,7 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Price</label>
             <input
@@ -72,7 +77,7 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Stock</label>
             <input
@@ -85,7 +90,7 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Category</label>
             <select
@@ -95,15 +100,27 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
               className="w-full p-2 border rounded"
               required
             >
-              {categories.map(category => (
+              {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
               ))}
             </select>
           </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Image URL</label>
+            <input
+              type="text"
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none"
+              placeholder="https://example.com/image.jpg"
+              required
+            />
+          </div>
         </div>
-        
+
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Description</label>
           <textarea
@@ -115,7 +132,7 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
             required
           />
         </div>
-        
+
         <div className="flex space-x-2">
           <button
             type="submit"
@@ -132,7 +149,7 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
           </button>
         </div>
       </form>
-    )
+    );
   }
 
   return (
@@ -143,7 +160,7 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
           Price: ${product.price.toFixed(2)} | Stock: {product.stock}
         </p>
       </div>
-      
+
       <div className="flex space-x-2">
         <button
           onClick={() => setIsEditing(true)}
@@ -159,7 +176,7 @@ const AdminProductItem = ({ product, categories, onUpdate }) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminProductItem
+export default AdminProductItem;
